@@ -2,6 +2,18 @@
 
 Lucky is an Electron + Vite + Vue + TypeScript desktop client for local AI agent workflows. The npm package name remains `lucky-ai-client`. It is a developer console for repository-aware agents, approvals, tool calls, diffs, terminal output, and task planning.
 
+## Screenshots
+
+界面来自未打包的开发构建，语言跟随系统，这组图是英文。
+
+![Settings · General — work mode, approvals, and language](docs/images/03-settings-general.png)
+
+常规设置：工作模式、操作审批和界面语言。
+
+![Settings · About — product name and update check](docs/images/04-settings-about.png)
+
+关于页：产品名是 Lucky，并可以手动检查更新。开发构建里自动更新是关闭的。
+
 ## License
 
 Lucky is free software under the [GNU General Public License v3.0 only](LICENSE).
