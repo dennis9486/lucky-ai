@@ -50,6 +50,10 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           if [ -z "${CSC_LINK}" ]; then
+            # 未配置的 secret 会变成空字符串。electron-builder 把空 CSC_LINK 当成证书路径，
+            # 解析后就是仓库目录，签名会报 “not a file”。
+            unset CSC_LINK
+            unset CSC_KEY_PASSWORD
             export CSC_IDENTITY_AUTO_DISCOVERY=false
           fi
           args=(--publish never)

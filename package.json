@@ -1,6 +1,6 @@
 {
   "name": "lucky-ai-client",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Lucky — desktop AI coding agent",
   "license": "GPL-3.0-only",
   "private": true,
