@@ -24,6 +24,7 @@ import { OllamaChatFormatter, OpenAIChatFormatter } from '@agentscope-ai/agentsc
 import { getContentBlocks, getTextContent } from '@agentscope-ai/agentscope/message'
 import type { DataBlock, Msg } from '@agentscope-ai/agentscope/message'
 import { sanitizeToolSchemas } from './json-schema.js'
+import { repairToolCallPairing } from './tool-call-pairing.js'
 import { withReasoningRoundTrip } from './reasoning-roundtrip.js'
 import { withClientAbort, withRequestAbortSignal } from './abort-signal.js'
 import { detectVisionSupport } from './vision-detect.js'
@@ -116,6 +117,14 @@ export function createChatModel(provider: AIProviderConfig, options: CreateChatM
 class LuckyOpenAICompatibleFormatter extends OpenAIChatFormatter {
   constructor(private readonly options: { supportsVision: boolean }) {
     super()
+  }
+
+  /**
+   * 在父类格式化之后补齐 tool_calls ↔ tool 响应的配对，避免回复中断遗留的残缺历史
+   * 被 API 以 400 "insufficient tool messages following tool_calls message" 拒绝。
+   */
+  override async format({ msgs }: { msgs: Msg[] }): Promise<Record<string, unknown>[]> {
+    return repairToolCallPairing(await super.format({ msgs }))
   }
 
   override async _formatMultimodalBlock({
