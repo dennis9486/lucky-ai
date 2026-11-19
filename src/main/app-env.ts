@@ -15,8 +15,9 @@ export function getRendererPath(): string {
 }
 
 export function getBuildAssetPath(...segments: string[]): string {
-  // 打包后图标经 extraResources 落在 Resources/（asar 之外）——nativeImage 无法可靠读取
-  // asar 内部路径，读到空图会把 dock 图标清成默认 Electron 图标。开发时用项目根 build/。
+  // 打包后托盘等图标经 extraResources 落在 Resources/。macOS 的 icon.icns 由
+  // electron-builder 按 mac.icon 写入同一位置，不要再放进 extraResources，否则硬链接会 EEXIST。
+  // nativeImage 读不到 asar 内的图标。开发时用项目根 build/。
   const base = app.isPackaged ? process.resourcesPath : join(app.getAppPath(), 'build')
   return join(base, ...segments)
 }
