@@ -10,6 +10,7 @@ import { registerExtensionIpc } from './ipc/extension.ipc.js'
 import { registerFormatterIpc } from './ipc/formatter.ipc.js'
 import { registerTerminalIpc } from './ipc/terminal.ipc.js'
 import { registerSettingsIpc } from './ipc/ai.ipc.js'
+import { registerSkillsIpc } from './ipc/skills.ipc.js'
 import { registerAgentIpc } from './ipc/agent.ipc.js'
 import { registerAgentRuntimeIpc } from './ipc/agent-runtime.ipc.js'
 import { registerConversationIpc } from './ipc/conversation.ipc.js'
@@ -241,6 +242,7 @@ function registerAllIpc(): void {
   registerExtensionIpc()
   registerTerminalIpc()
   registerSettingsIpc()
+  registerSkillsIpc()
   registerAgentIpc()
   registerAgentRuntimeIpc(getPrimaryWindow)
   registerConversationIpc()

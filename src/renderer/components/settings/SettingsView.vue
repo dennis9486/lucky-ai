@@ -8,6 +8,7 @@ import {
   UserCircle,
   Sun,
   Hexagon,
+  Library,
   Sparkles,
   Keyboard,
   Scan,
@@ -27,6 +28,7 @@ import PersonalizationPanel from './panels/PersonalizationPanel.vue'
 import KeyboardShortcutsPanel from './panels/KeyboardShortcutsPanel.vue'
 import PlaceholderPanel from './panels/PlaceholderPanel.vue'
 import ConfigurationPanel from './panels/ConfigurationPanel.vue'
+import SkillsPanel from './panels/SkillsPanel.vue'
 import McpServersPanel from './panels/McpServersPanel.vue'
 import SecurityPanel from './panels/SecurityPanel.vue'
 import UsagePanel from './panels/UsagePanel.vue'
@@ -38,6 +40,7 @@ type SettingsTabId =
   | 'profile'
   | 'appearance'
   | 'configuration'
+  | 'skills'
   | 'personalization'
   | 'keyboard-shortcuts'
   | 'brain'
@@ -62,6 +65,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'profile', labelKey: 'settings.tabs.profile', icon: UserCircle, group: 'personal' },
   { id: 'appearance', labelKey: 'settings.tabs.appearance', icon: Sun, group: 'personal' },
   { id: 'configuration', labelKey: 'settings.tabs.configuration', icon: Hexagon, group: 'personal' },
+  { id: 'skills', labelKey: 'settings.tabs.skills', icon: Library, group: 'personal' },
   { id: 'personalization', labelKey: 'settings.tabs.personalization', icon: Sparkles, group: 'personal' },
   { id: 'keyboard-shortcuts', labelKey: 'settings.tabs.keyboardShortcuts', icon: Keyboard, group: 'personal' },
   { id: 'brain', labelKey: 'settings.tabs.brain', icon: Brain, group: 'integration' },
@@ -192,6 +196,7 @@ function selectTab(id: SettingsTabId): void {
           <PersonalizationPanel v-else-if="activeTab === 'personalization'" />
           <KeyboardShortcutsPanel v-else-if="activeTab === 'keyboard-shortcuts'" />
           <ConfigurationPanel v-else-if="activeTab === 'configuration'" />
+          <SkillsPanel v-else-if="activeTab === 'skills'" />
           <AgentRuntimeView v-else-if="activeTab === 'brain'" />
           <McpServersPanel v-else-if="activeTab === 'mcp-servers'" />
           <UsagePanel v-else-if="activeTab === 'usage'" />

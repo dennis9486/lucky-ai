@@ -377,6 +377,16 @@ const api = {
       invoke(IPC_CHANNELS.SETTINGS_LIST_PROVIDER_MODELS, provider)
   },
 
+  skills: {
+    list: (): Promise<IpcResult<import('../shared/types/skill.js').ConfiguredSkill[]>> =>
+      invoke(IPC_CHANNELS.SKILLS_LIST),
+    save: (input: import('../shared/types/skill.js').SaveConfiguredSkillInput): Promise<IpcResult<void>> =>
+      invoke(IPC_CHANNELS.SKILLS_SAVE, input),
+    setEnabled: (id: string, enabled: boolean): Promise<IpcResult<void>> =>
+      invoke(IPC_CHANNELS.SKILLS_SET_ENABLED, id, enabled),
+    delete: (id: string): Promise<IpcResult<void>> => invoke(IPC_CHANNELS.SKILLS_DELETE, id)
+  },
+
   sandbox: {
     getStatus: (): Promise<IpcResult<import('../shared/types/sandbox.js').SandboxStatus>> =>
       invoke(IPC_CHANNELS.SANDBOX_GET_STATUS)

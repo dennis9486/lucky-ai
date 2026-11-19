@@ -114,6 +114,10 @@ export const IPC_CHANNELS = {
   SETTINGS_PROBE_MODEL_CAPABILITIES: 'settings:probe-model-capabilities',
   SETTINGS_GET_PROJECT_PROVIDER: 'settings:get-project-provider',
   SETTINGS_SET_PROJECT_PROVIDER: 'settings:set-project-provider',
+  SKILLS_LIST: 'skills:list',
+  SKILLS_SAVE: 'skills:save',
+  SKILLS_SET_ENABLED: 'skills:set-enabled',
+  SKILLS_DELETE: 'skills:delete',
   // Sandbox
   SANDBOX_GET_STATUS: 'sandbox:get-status',
   AI_INLINE_COMPLETE: 'ai:inline-complete',
