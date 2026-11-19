@@ -6,6 +6,10 @@ Lucky is an Electron + Vite + Vue + TypeScript desktop client for local AI agent
 
 界面来自未打包的开发构建，语言跟随系统，这组图是英文。
 
+![Home — empty session and composer](docs/images/02-home.png)
+
+首页：新对话、输入框，以及浏览器和已安排任务的入口。
+
 ![Settings · General — work mode, approvals, and language](docs/images/03-settings-general.png)
 
 常规设置：工作模式、操作审批和界面语言。

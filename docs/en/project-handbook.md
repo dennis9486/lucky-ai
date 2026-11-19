@@ -33,6 +33,8 @@ Local mode asks for a display name and an optional email. The session lives in t
 
 After sign-in the app opens on Home. The sidebar lists new chat, search, browser, scheduled tasks, and projects. The composer accepts `@` mentions for workspace context and lets the user pick a model and a project.
 
+![Home: empty session and composer](../images/02-home.png)
+
 Professional mode (Settings → “For programming”) adds a Chat / Code switch at the top of the sidebar. Daily mode keeps chat, browser, and scheduled tasks.
 
 ### Settings
