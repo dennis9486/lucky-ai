@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- Electron / V8 在 Hardened Runtime 下需要 JIT 与可执行内存 -->
+  <key>com.apple.security.cs.allow-jit</key>
+  <true/>
+  <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+  <true/>
+  <!-- 加载未签名的原生模块（better-sqlite3 / node-pty）需要关闭库校验 -->
+  <key>com.apple.security.cs.disable-library-validation</key>
+  <true/>
+  <!-- 允许通过环境变量加载 dylib（部分原生依赖需要） -->
+  <key>com.apple.security.cs.allow-dyld-environment-variables</key>
+  <true/>
+  <!-- 应用需访问网络（模型 API / 自动更新等） -->
+  <key>com.apple.security.network.client</key>
+  <true/>
+</dict>
+</plist>

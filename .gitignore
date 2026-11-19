@@ -1,0 +1,21 @@
+node_modules/
+out/
+dist/
+release/
+*.log
+*.tsbuildinfo
+.DS_Store
+.idea/
+.vscode/
+
+# Environment variables (local secrets)
+.env
+.env.*
+!.env.example
+.env.local
+.env.*.local
+.pnpm-store/
+
+# Playwright E2E artifacts
+test-results/
+playwright-report/

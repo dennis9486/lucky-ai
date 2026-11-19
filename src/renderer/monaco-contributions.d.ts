@@ -1,0 +1,5 @@
+declare module 'monaco-editor/esm/vs/editor/contrib/inlineCompletions/browser/controller/inlineCompletionsController.js'
+declare module 'monaco-editor/esm/vs/editor/contrib/gotoSymbol/browser/peek/referencesController.js'
+declare module 'monaco-editor/esm/vs/editor/contrib/contextmenu/browser/contextmenu.js'
+declare module 'monaco-editor/esm/vs/platform/actions/common/actions.js'
+declare module 'monaco-editor/esm/vs/platform/commands/common/commands.js'

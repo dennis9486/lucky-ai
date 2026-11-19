@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  # 快速门禁：类型 / lint / 单测（纯 Node，无需原生模块跨平台验证）
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run type-check
+      - run: pnpm run lint
+      - run: pnpm run test
+
+  # 跨平台集成：原生模块（better-sqlite3 / node-pty）rebuild + 生产构建 +
+  # Electron E2E + electron-builder 解包冒烟。原生模块的问题恰恰是平台相关的，
+  # 三个平台都要真正启动应用跑一遍。
+  e2e:
+    name: e2e (${{ matrix.os }})
+    needs: verify
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-2022]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      # postinstall 会按当前平台 electron-rebuild better-sqlite3 / node-pty
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+      - name: Run E2E (Linux, via xvfb)
+        if: runner.os == 'Linux'
+        run: xvfb-run -a pnpm exec playwright test
+      - name: Run E2E
+        if: runner.os != 'Linux'
+        run: pnpm exec playwright test
+      # 打包冒烟：只产出解包目录（不做安装器/签名），验证 electron-builder 的
+      # 文件收集与原生依赖装配在该平台可用
+      - name: Package smoke (unpacked)
+        run: pnpm exec electron-builder --dir
+      - name: Upload traces on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-traces-${{ matrix.os }}
+          path: test-results/
+          retention-days: 7

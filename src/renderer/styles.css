@@ -1,0 +1,379 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  html, body, #app { height: 100%; margin: 0; }
+
+  :root {
+    --codex-bg: #fafafa;
+    --codex-sidebar: #f5f5f5;
+    --codex-sidebar-hover: #ebebeb;
+    --codex-composer-surface: #f7f7f7;
+    --codex-composer-bar: #f7f7f7;
+    --codex-editor-chrome: #f3f3f3;
+    --codex-editor-tab-height: 40px;
+    /* 内容区统一阅读列宽：首页欢迎/会话消息/输入框共用同一值，
+       切换 home ↔ chat 时宽度零跳变，且天然限制窄窗口横向溢出。 */
+    --content-measure: 1040px;
+    --codex-text: #1a1a1a;
+    --codex-text-secondary: #4a4a4a;
+    --codex-muted: #8a8a8a;
+    --codex-border: #e5e5e5;
+    --codex-border-hover: #d4d4d4;
+    --codex-hover: #f0f0f0;
+    --codex-accent: #2563eb;
+    --codex-accent-hover: #1d4ed8;
+    --codex-code-font: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --codex-code-font-size: 12px;
+    --scrollbar-size: 8px;
+    --scrollbar-thumb-idle: color-mix(in srgb, var(--codex-text) 10%, transparent);
+    --scrollbar-thumb: color-mix(in srgb, var(--codex-text) 16%, transparent);
+    --scrollbar-thumb-hover: color-mix(in srgb, var(--codex-text) 26%, transparent);
+    --scrollbar-thumb-active: color-mix(in srgb, var(--codex-text) 34%, transparent);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--codex-bg);
+    color: var(--codex-text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /*
+   * Desktop-app selection model:
+   * keep chrome/navigation/buttons non-selectable so Ctrl+A does not paint the
+   * whole webview blue, but explicitly preserve selection in real content and
+   * editing surfaces.
+   */
+  #app {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  input,
+  textarea,
+  select,
+  [contenteditable='true'],
+  .selectable,
+  .markdown-body,
+  .markdown-inner,
+  .user-bubble,
+  .code-block,
+  .command-block,
+  .terminal-output,
+  .xterm,
+  .monaco-editor,
+  .monaco-diff-editor,
+  .report-markdown,
+  .agent-output,
+  .code-agent-parts,
+  .tool-log-body,
+  .patch-list-body,
+  .review-body,
+  .graph-body {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  button,
+  [role='button'],
+  label,
+  summary,
+  svg,
+  img,
+  .no-select,
+  .app-sidebar,
+  .settings-sidebar,
+  .titlebar,
+  .titlebar-shell,
+  .app-titlebar,
+  .sidebar-resizer {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  html.font-smoothing body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html:not(.font-smoothing) body {
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-3 py-1.5 bg-codex-accent text-white rounded-lg text-sm font-medium
+           hover:bg-codex-accent-hover transition-colors disabled:opacity-50;
+  }
+  .btn-ghost {
+    @apply px-3 py-1.5 text-codex-muted rounded-lg text-sm
+           hover:bg-codex-hover hover:text-codex-text transition-colors;
+  }
+
+  .composer-surface {
+    background: var(--codex-composer-surface, var(--codex-composer-bar));
+    border: 1px solid var(--codex-border);
+    box-shadow: 0 18px 54px rgba(0, 0, 0, 0.08);
+  }
+
+  [data-theme='dark'] .composer-surface {
+    box-shadow:
+      0 10px 36px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 color-mix(in srgb, var(--codex-text) 5%, transparent);
+  }
+
+  .composer-send-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    background: color-mix(in srgb, var(--codex-text) 10%, var(--codex-composer-surface, var(--codex-bg)));
+    color: var(--codex-muted);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .composer-send-btn:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--codex-text) 16%, var(--codex-composer-surface, var(--codex-bg)));
+    color: var(--codex-text-secondary);
+  }
+
+  .composer-send-btn.is-ready {
+    background: var(--codex-text);
+    color: var(--codex-bg);
+  }
+
+  .composer-send-btn.is-ready:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--codex-text) 90%, var(--codex-bg));
+    color: var(--codex-bg);
+  }
+
+  .composer-send-btn:disabled {
+    cursor: not-allowed;
+    background: color-mix(in srgb, var(--codex-text) 10%, var(--codex-composer-surface, var(--codex-bg)));
+    color: color-mix(in srgb, var(--codex-muted) 80%, transparent);
+  }
+
+  .font-code {
+    font-family: var(--codex-code-font);
+    font-size: var(--codex-code-font-size);
+  }
+
+  .pretty-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb-idle) transparent;
+  }
+
+  .pretty-scrollbar:hover,
+  .pretty-scrollbar:focus-within {
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+
+  .pretty-scrollbar::-webkit-scrollbar {
+    width: var(--scrollbar-size);
+    height: var(--scrollbar-size);
+  }
+
+  .pretty-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+    margin-block: 4px;
+  }
+
+  .pretty-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb-idle);
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background-clip: padding-box;
+    transition: background-color 0.18s ease;
+  }
+
+  .pretty-scrollbar:hover::-webkit-scrollbar-thumb,
+  .pretty-scrollbar:focus-within::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+  }
+
+  .pretty-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover);
+  }
+
+  .pretty-scrollbar::-webkit-scrollbar-thumb:active {
+    background-color: var(--scrollbar-thumb-active);
+  }
+
+  .pretty-scrollbar::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  .browser-scroll::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .browser-scroll.pretty-scrollbar {
+    scrollbar-color: var(--scrollbar-thumb-idle) transparent;
+  }
+
+  .browser-scroll.pretty-scrollbar:hover,
+  .browser-scroll.pretty-scrollbar:focus-within {
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+
+  .browser-scroll.pretty-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb-idle);
+  }
+
+  .browser-scroll.pretty-scrollbar:hover::-webkit-scrollbar-thumb,
+  .browser-scroll.pretty-scrollbar:focus-within::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+  }
+}
+
+[data-translucent-sidebar='true'] .app-sidebar,
+[data-translucent-sidebar='true'] .settings-sidebar,
+[data-translucent-sidebar='true'] .titlebar-sidebar-zone {
+  background: color-mix(in srgb, var(--codex-sidebar) 78%, transparent);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+.use-pointer-cursor button,
+.use-pointer-cursor [role='button'],
+.use-pointer-cursor [role='switch'],
+.use-pointer-cursor label,
+.use-pointer-cursor .sidebar-nav-item,
+.use-pointer-cursor .nav-item {
+  cursor: pointer;
+}
+
+[data-reduce-motion='true'] *,
+[data-reduce-motion='true'] *::before,
+[data-reduce-motion='true'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+[data-diff-markers='plus-minus'] .diff-add {
+  @apply before:content-['+_'];
+}
+
+[data-diff-markers='plus-minus'] .diff-remove {
+  @apply before:content-['-_'];
+}
+
+.prose pre { position: relative; }
+
+/* Monaco diff editor — Shiki themes omit diff colors, reinforce them globally. */
+.monaco-diff-editor .line-insert,
+.monaco-diff-editor .char-insert {
+  background-color: rgba(46, 160, 67, 0.22) !important;
+}
+
+.monaco-diff-editor .line-delete,
+.monaco-diff-editor .char-delete {
+  background-color: rgba(255, 129, 130, 0.28) !important;
+}
+
+.monaco-diff-editor .insert-sign,
+.monaco-diff-editor .delete-sign {
+  opacity: 1 !important;
+}
+
+.monaco-diff-editor .insert-sign {
+  background: #2da44e !important;
+}
+
+.monaco-diff-editor .delete-sign {
+  background: #cf222e !important;
+}
+
+.monaco-diff-editor.side-by-side .editor.original {
+  box-shadow: inset -2px 0 0 rgba(207, 34, 46, 0.18);
+}
+
+.monaco-diff-editor.side-by-side .editor.modified {
+  box-shadow: inset 2px 0 0 rgba(45, 164, 78, 0.18);
+}
+
+[data-theme='dark'] .monaco-diff-editor .line-insert,
+[data-theme='dark'] .monaco-diff-editor .char-insert {
+  background-color: rgba(63, 185, 80, 0.24) !important;
+}
+
+[data-theme='dark'] .monaco-diff-editor .line-delete,
+[data-theme='dark'] .monaco-diff-editor .char-delete {
+  background-color: rgba(255, 123, 114, 0.26) !important;
+}
+
+[data-theme='dark'] .monaco-diff-editor .insert-sign {
+  background: #3fb950 !important;
+}
+
+[data-theme='dark'] .monaco-diff-editor .delete-sign {
+  background: #ff7b72 !important;
+}
+
+.monaco-editor .goto-definition-link {
+  text-decoration: underline;
+  cursor: pointer;
+  color: var(--codex-accent, #0969da) !important;
+}
+
+.monaco-editor .margin .package-json-run-glyph {
+  cursor: pointer;
+}
+
+.monaco-editor .margin .package-json-run-glyph::before {
+  display: block;
+  width: 0;
+  height: 0;
+  margin: 5px auto 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 7px solid #848484;
+  content: '';
+}
+
+.monaco-editor .margin .package-json-run-glyph:hover::before {
+  border-left-color: #2f6c7a;
+}
+
+[data-theme='dark'] .monaco-editor .margin .package-json-run-glyph::before {
+  border-left-color: #aaaaaa;
+}
+
+[data-theme='dark'] .monaco-editor .margin .package-json-run-glyph:hover::before {
+  border-left-color: #75becc;
+}
+
+/* Monaco native context menu — keep codicons VS Code-sized (16px). */
+.monaco-menu .monaco-action-bar.vertical .action-menu-item {
+  height: 28px;
+  min-height: 28px;
+}
+
+.monaco-menu .action-label.icon,
+.monaco-menu .action-label.codicon,
+.monaco-menu .codicon[class*='codicon-'] {
+  width: 16px !important;
+  height: 16px !important;
+  font-size: 16px !important;
+  line-height: 16px !important;
+  background-size: 16px !important;
+  flex-shrink: 0;
+}
+
+.monaco-menu .action-label:not(.icon):not(.codicon) {
+  font-size: 13px;
+}
+
+.monaco-menu .keybinding {
+  font-size: 11px;
+}
