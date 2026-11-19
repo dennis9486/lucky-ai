@@ -2,7 +2,7 @@
 
 Lucky is a desktop AI coding assistant that runs on the user's machine. One Electron window holds chat, a code workbench, an embedded browser, a terminal, Git, and scheduled tasks. Models can be local (Ollama or LM Studio) or any OpenAI-compatible cloud API. Conversations, memories, and code-agent sessions are stored in a local SQLite database. There is no cloud account.
 
-The repository and npm package are named `lucky-ai-client` (version `0.1.4`). The installer name, window title, and About page say **Lucky**. The auto-update app id is `space.luckly.ai.client`. Leave that id alone when renaming the product, or existing installs will not see updates.
+The repository and npm package are named `lucky-ai-client` (version `0.1.5`). The installer name, window title, and About page say **Lucky**. The auto-update app id is `space.luckly.ai.client`. Leave that id alone when renaming the product, or existing installs will not see updates.
 
 ## Contents
 
